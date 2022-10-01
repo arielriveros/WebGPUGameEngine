@@ -16,6 +16,7 @@
   "dependencies": {
     "@types/node": "^18.7.23",
     "@webgpu/types": "^0.1.16",
+    "copy-webpack-plugin": "^11.0.0",
     "css-loader": "^6.7.1",
     "gl-matrix": "^3.4.3",
     "style-loader": "^3.3.1",

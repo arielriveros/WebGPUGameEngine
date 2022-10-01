@@ -29,7 +29,7 @@ module.exports = {
 } */
 
 const path = require('path');
-//const CopyWebpackPlugin = require("copy-webpack-plugin");
+const CopyWebpackPlugin = require("copy-webpack-plugin");
 
 module.exports = {
     entry: './src/main.ts',
@@ -66,10 +66,9 @@ module.exports = {
         path: path.resolve(__dirname, 'public')
     },
     mode: 'development',
-    /* plugins: [
+    plugins: [
         new CopyWebpackPlugin({patterns: [
-            { from: 'src/core/rendering/shaders/sources', to: 'shaders' },
-            { from: 'src/game/assets', to: 'assets' }
+            { from: 'src/renderer/shaders/sources', to: 'shaders' }
         ]})
-    ] */
+    ]
 }
