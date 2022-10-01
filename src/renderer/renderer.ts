@@ -1,55 +1,47 @@
-import { checkWebGPU } from "../helper";
-import shader from "./shaders/shader.wgsl";
+import {Shader} from "./shaders/shader";
+import { RenderContext } from "./renderContext";
 
 export class Renderer {
 
-    private canvas!: HTMLCanvasElement;
-    private device!: GPUDevice;
-    private context!: GPUCanvasContext;
-    private format!: GPUTextureFormat;
+    context: RenderContext;
 
-    constructor() { }
+    constructor() {
+        this.context = new RenderContext();
+    }
 
     public async initialize(): Promise<void> {
+        await this.context.initialize();
+    }
 
-        if (!checkWebGPU()) { throw new Error("WebGPU is not supported"); }
-
-        const adapter: GPUAdapter = await navigator.gpu?.requestAdapter() as GPUAdapter;
-        const format: GPUTextureFormat = 'bgra8unorm';
-
-        this.canvas = document.getElementById('game-canvas') as HTMLCanvasElement;
-        this.device = await adapter?.requestDevice() as GPUDevice;
-        this.context = this.canvas.getContext('webgpu') as unknown as GPUCanvasContext;
-
-        this.context.configure({
-            device: this.device,
-            format: format
-        });
-
+    public createPipeline(shader: Shader): GPURenderPipeline {
         const pipelineDescriptor: GPURenderPipelineDescriptor = {
+            layout: 'auto',
             vertex: {
-                module: this.device.createShaderModule({
-                    code: shader
+                module: this.context.device.createShaderModule({
+                    code: shader.vertexShader
                 }),
                 entryPoint: 'vs_main',
             },
 
             fragment: {
-                module: this.device.createShaderModule({
-                    code: shader
+                module: this.context.device.createShaderModule({
+                    code: shader.fragmentShader
                 }),
                 entryPoint: 'fs_main',
                 targets: [{
-                    format: format
+                    format: this.context.format
                 }]
             },
             primitive: { topology: 'triangle-list' }
         }
 
-        const pipeline = this.device.createRenderPipeline(pipelineDescriptor);
+        return this.context.device.createRenderPipeline(pipelineDescriptor);
+    }
 
-        const commandEncoder: GPUCommandEncoder = this.device.createCommandEncoder();
-        const textureView: GPUTextureView = this.context.getCurrentTexture().createView();
+        
+    public render(pipeline: GPURenderPipeline): void {
+        const commandEncoder: GPUCommandEncoder = this.context.device.createCommandEncoder();
+        const textureView: GPUTextureView = this.context.context.getCurrentTexture().createView();
        
         const renderPassDescriptor: GPURenderPassDescriptor = {
             colorAttachments: [{
@@ -66,18 +58,6 @@ export class Renderer {
         passEncoder.draw(3, 1, 0, 0);
         passEncoder.end();
 
-        this.device.queue.submit([commandEncoder.finish()]);
-    }
-
-    public createGpuBuffer(device: GPUDevice, data: Float32Array, usageFlag:GPUBufferUsageFlags = GPUBufferUsage.VERTEX | GPUBufferUsage.COPY_DST): GPUBuffer {
-        const buffer = device.createBuffer({
-            size: data.byteLength,
-            usage: usageFlag,
-            mappedAtCreation: true
-        })
-
-        new Float32Array(buffer.getMappedRange()).set(data);
-        buffer.unmap();
-        return buffer;
+        this.context.device.queue.submit([commandEncoder.finish()]);
     }
 }
