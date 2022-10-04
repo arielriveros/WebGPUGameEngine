@@ -1,27 +1,22 @@
 import { checkWebGPU } from "../helper";
 
 export class RenderContext {
-    protected canvasElement!: HTMLCanvasElement;
-    protected canvasContext!: GPUCanvasContext;
-    device: any;
-    private _format: any;
-    public get format(): any {
-        return this._format;
-    }
-    public set format(value: any) {
-        this._format = value;
+    protected _canvasElement!: HTMLCanvasElement;
+    protected _renderContext!: GPUCanvasContext;
+
+    public async initialize(): Promise<void> {
+        this._canvasElement = document.getElementById('game-canvas') as HTMLCanvasElement;
+        this._renderContext = this._canvasElement.getContext('webgpu') as unknown as GPUCanvasContext;
     }
 
-    public async initialize(): Promise<void> {}
-
-    public get renderContext(): GPUCanvasContext | WebGLRenderingContext{
-        return this.renderContext;
+    public get renderContext(): GPUCanvasContext {
+        return this._renderContext;
     }
 
-    public set renderContext(context: GPUCanvasContext | WebGLRenderingContext) { }
+    public set renderContext(context: GPUCanvasContext) { }
 
     public get canvas(): HTMLCanvasElement {
-        return this.canvasElement;
+        return this._canvasElement;
     }
         
 }

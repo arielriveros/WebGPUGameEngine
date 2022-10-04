@@ -2,33 +2,31 @@ import { RenderContext } from "../renderContext";
 import { checkWebGPU } from "./helper";
 
 export class RenderContextGPU extends RenderContext {
-    private gpuDevice!: GPUDevice;
-    private gpuTextureFormat!: GPUTextureFormat;
-    private gpuAdapter!: GPUAdapter;
+    private _device!: GPUDevice;
+    private _textureFormat!: GPUTextureFormat;
+    private _adapter!: GPUAdapter;
 
     public async initialize(): Promise<void> {
-
+        super.initialize();
         if (!checkWebGPU()) { throw new Error("WebGPU is not supported"); }
 
-        super.canvasElement = document.getElementById('game-canvas') as HTMLCanvasElement;
-        this.gpuAdapter = await navigator.gpu?.requestAdapter() as GPUAdapter;
-        this.gpuDevice = await this.gpuAdapter?.requestDevice() as GPUDevice;
-        super.renderContext = this.canvasElement.getContext('webgpu') as unknown as GPUCanvasContext;
-        this.gpuTextureFormat = super.renderContext.getPreferredFormat(this.gpuAdapter); // change later for navigator.gpu.getPreferredCanvasFormat()
+        this._adapter = await navigator.gpu?.requestAdapter() as GPUAdapter;
+        this._device = await this._adapter?.requestDevice() as GPUDevice;
+        this._textureFormat = 'rgba8unorm';// super.renderContext.getPreferredFormat(this._adapter); // change later for navigator.gpu.getPreferredCanvasFormat()
 
         super.renderContext.configure({
-            device: this.gpuDevice,
-            format: this.gpuTextureFormat,
+            device: this._device,
+            format: this._textureFormat,
             compositingAlphaMode: 'opaque' // change later for alphaMode, compositeAlphaMode will be deprecated
         });
     }
 
-    public set renderContext(context: GPUCanvasContext) { super.renderContext = context; }
+    public get adapter(): GPUAdapter { return this._adapter; }
 
-    public get adapter(): GPUAdapter { return this.gpuAdapter; }
+    public get format(): GPUTextureFormat { return this._textureFormat; }
 
-    public get format(): GPUTextureFormat { return this.gpuTextureFormat; }
+    public set format(format: GPUTextureFormat) { this._textureFormat = format; }
 
-    public set format(format: GPUTextureFormat) { this.gpuTextureFormat = format; }
+    public get device(): GPUDevice { return this._device; }
         
 }
