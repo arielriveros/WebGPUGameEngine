@@ -1,12 +1,13 @@
 import {Shader} from "./shaders/shader";
 import { RenderContext } from "./renderContext";
+import { RenderContextGPU } from "./webgpu/renderContextWebGPU";
 
 export class Renderer {
 
-    context: RenderContext;
+    context: RenderContextGPU;
 
     constructor() {
-        this.context = new RenderContext();
+        this.context = new RenderContextGPU();
     }
 
     public async initialize(): Promise<void> {
@@ -41,7 +42,7 @@ export class Renderer {
         
     public render(pipeline: GPURenderPipeline): void {
         const commandEncoder: GPUCommandEncoder = this.context.device.createCommandEncoder();
-        const textureView: GPUTextureView = this.context.context.getCurrentTexture().createView();
+        const textureView: GPUTextureView = this.context.renderContext.getCurrentTexture().createView();
        
         const renderPassDescriptor: GPURenderPassDescriptor = {
             colorAttachments: [{
