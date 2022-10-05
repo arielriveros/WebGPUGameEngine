@@ -14,7 +14,13 @@ export class Renderer {
         await this.context.initialize();
     }
 
-    public createPipeline(shader: Shader): GPURenderPipeline {
+    /**
+     * Creates a gpu render pipeline
+     * @param shader Shader program to use in the pipeline
+     * @returns GPU render pipeline
+     */
+    public async createPipeline(shader: Shader): Promise<GPURenderPipeline> {
+        
         const pipelineDescriptor: GPURenderPipelineDescriptor = {
             layout: 'auto',
             vertex: {
@@ -36,7 +42,9 @@ export class Renderer {
             primitive: { topology: 'triangle-list' }
         }
 
-        return this.context.device.createRenderPipeline(pipelineDescriptor);
+        const pipeline = await this.context.device.createRenderPipelineAsync(pipelineDescriptor);
+
+        return pipeline;
     }
 
         
