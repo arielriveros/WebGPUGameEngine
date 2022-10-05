@@ -6,7 +6,7 @@ async function initialize(): Promise<void> {
     await renderer.initialize();
     const shader = new Shader();
     shader.initialize("./shaders/shader.vs.wgsl", "./shaders/shader.fs.wgsl");
-    const pipeline = renderer.createPipeline(shader);
+    const pipeline = await renderer.createPipeline(shader);
     renderer.render(pipeline);
 
 }
