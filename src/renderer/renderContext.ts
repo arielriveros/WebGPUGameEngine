@@ -1,4 +1,4 @@
-import { checkWebGPU } from "../helper";
+import config from "../config.json";
 
 export class RenderContext {
     protected _canvasElement!: HTMLCanvasElement;
@@ -6,7 +6,10 @@ export class RenderContext {
 
     public async initialize(): Promise<void> {
         this._canvasElement = document.getElementById('game-canvas') as HTMLCanvasElement;
-        this._renderContext = this._canvasElement.getContext('webgpu') as unknown as GPUCanvasContext;
+
+        if(config.render_api == "webgpu"){
+            this._renderContext = this._canvasElement.getContext('webgpu') as unknown as GPUCanvasContext;
+        }
     }
 
     public get renderContext(): GPUCanvasContext {
