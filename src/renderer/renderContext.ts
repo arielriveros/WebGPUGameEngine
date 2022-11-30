@@ -8,7 +8,7 @@ export class RenderContext {
         this._canvasElement = document.getElementById('game-canvas') as HTMLCanvasElement;
 
         if(config.render_api == "webgpu"){
-            this._renderContext = this._canvasElement.getContext('webgpu') as unknown as GPUCanvasContext;
+            this._renderContext = this._canvasElement.getContext('webgpu') as GPUCanvasContext;
         }
     }
 

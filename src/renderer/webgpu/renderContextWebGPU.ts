@@ -1,7 +1,7 @@
 import { RenderContext } from "../renderContext";
 import { checkWebGPU } from "./helper";
 
-export class RenderContextGPU extends RenderContext {
+export class RenderContextWebGPU extends RenderContext {
     private _device!: GPUDevice;
     private _textureFormat!: GPUTextureFormat;
     private _adapter!: GPUAdapter;
