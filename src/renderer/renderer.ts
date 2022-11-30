@@ -1,12 +1,13 @@
-import { RenderContextGPU } from "./webgpu/renderContextWebGPU";
-import { Pipeline } from "./pipeline";
+import { RenderContextWebGPU } from "./webgpu/renderContextWebGPU";
+import { PipelineWebGPU } from "./webgpu/pipelineWebGPU";
+import { PipelineBase } from "./pipeline";
 
 export class Renderer {
 
-    context: RenderContextGPU;
+    context: RenderContextWebGPU;
 
     constructor() {
-        this.context = new RenderContextGPU();
+        this.context = new RenderContextWebGPU();
     }
 
     public async initialize(): Promise<void> {
@@ -17,7 +18,7 @@ export class Renderer {
      * Draws a frame to the canvas using the given pipeline
      * @param pipeline Pipeline to use for drawing
      */
-    public render(pipeline: Pipeline): void {
+    public render(pipeline: PipelineBase): void {
         const commandEncoder: GPUCommandEncoder = this.context.device.createCommandEncoder();
         const textureView: GPUTextureView = this.context.renderContext.getCurrentTexture().createView();
        
