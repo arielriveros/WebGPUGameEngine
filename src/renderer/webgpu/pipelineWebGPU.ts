@@ -38,6 +38,11 @@ export class PipelineWebGPU implements PipelineBase {
     }
 
     public getPipeline(): GPURenderPipeline{
-        return this._pipeline;
+        if(this._pipeline != null) {
+            return this._pipeline;
+        }
+        else {
+            throw new Error("Pipeline has not been created");
+        }
     }
 }
