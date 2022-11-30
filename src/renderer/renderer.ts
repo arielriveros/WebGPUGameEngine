@@ -1,5 +1,4 @@
 import { RenderContextWebGPU } from "./webgpu/renderContextWebGPU";
-import { PipelineWebGPU } from "./webgpu/pipelineWebGPU";
 import { PipelineBase } from "./pipeline";
 
 export class Renderer {

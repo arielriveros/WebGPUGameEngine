@@ -1,7 +1,4 @@
-import { RenderContext } from "./renderContext";
 import { Shader } from "./shaders/shader";
-import { RenderContextWebGPU } from "./webgpu/renderContextWebGPU";
-import config from "../config.json";
 
 /* export class Pipeline {
     
