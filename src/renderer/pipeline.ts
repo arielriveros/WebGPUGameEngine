@@ -1,19 +1,17 @@
 import { RenderContext } from "./renderContext";
 import { Shader } from "./shaders/shader";
-import { RenderContextGPU } from "./webgpu/renderContextWebGPU";
+import { RenderContextWebGPU } from "./webgpu/renderContextWebGPU";
 import config from "../config.json";
 
-export class Pipeline {
+/* export class Pipeline {
     
-        private context: any; // RenderContext;
+        private context: RenderContextWebGPU | RenderContext; // RenderContext;
         private shader: Shader;
         private pipeline: any;
     
         constructor(context: RenderContext, shader: Shader) {
 
-            if(config.render_api == "webgpu"){
-                this.context = context as RenderContextGPU;
-            }
+            this.context = context as RenderContextWebGPU;
             else if(config.render_api == "webgl"){
                 this.context = context as RenderContext;
             }
@@ -57,5 +55,12 @@ export class Pipeline {
         public getPipeline(): GPURenderPipeline{
             return this.pipeline;
         }
-}
+} */
 
+export interface PipelineBase{
+    _context: any; // RenderContext;
+    _shader: Shader;
+    _pipeline: any;
+    createPipeline(shader: Shader): void;
+    getPipeline(): any;
+}
